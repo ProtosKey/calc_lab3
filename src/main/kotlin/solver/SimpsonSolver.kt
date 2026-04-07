@@ -1,0 +1,51 @@
+package text.solver
+
+import text.basic.CanSolve
+import text.exception.InitException
+import text.model.Border
+import text.model.Epsilon
+import text.model.Expression
+import text.utils.ErrorMessages
+import text.utils.IntegralUtils
+import java.math.BigDecimal
+import java.math.RoundingMode
+
+class SimpsonSolver : CanSolve {
+    companion object {
+        private const val MAX_ITERATIONS = 25
+        private const val METHOD = 4
+    }
+
+    override fun solve(expression: Expression, border: Border, epsilon: Epsilon): BigDecimal {
+        var n = 4
+        var k = 0
+        var result: BigDecimal
+        var newResult: BigDecimal = calculate(expression, border, n)
+        do {
+            n *= 2
+            result = newResult
+            newResult = calculate(expression, border, n)
+
+            if (k++ > MAX_ITERATIONS) {
+                throw InitException(ErrorMessages.MAX_ITERATIONS.message)
+            }
+        } while (IntegralUtils.calcRungeRule(result, newResult, METHOD) >= epsilon.epsilon)
+
+        return newResult
+    }
+
+    private fun calculate(expression: Expression, border: Border, n: Int): BigDecimal {
+        var result = BigDecimal.ZERO
+        val step = (border.right - border.left).divide(n.toBigDecimal(), 40, RoundingMode.HALF_UP)
+
+        result += expression.calculate(border.left)
+        result += expression.calculate(border.right)
+
+        for (i in 1 until n) {
+            result += (if (i % 2 == 1) 4 else 2).toBigDecimal() * expression
+                .calculate(border.left + step * i.toBigDecimal())
+        }
+
+        return result * step.divide(3.toBigDecimal(), 40, RoundingMode.HALF_UP)
+    }
+}
