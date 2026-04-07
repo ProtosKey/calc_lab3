@@ -1,6 +1,6 @@
 package core.model
 
-import text.exception.InitException
+import core.exception.InitException
 import java.math.BigDecimal
 
 class Border(val left: BigDecimal, val right: BigDecimal) {

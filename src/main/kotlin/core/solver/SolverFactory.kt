@@ -3,7 +3,6 @@ package core.solver
 import core.basic.CanSolve
 import core.basic.Factory
 import core.model.SolverType
-import text.solver.MiddleSquareSolver
 
 object SolverFactory : Factory<SolverType, CanSolve> {
     private val SOLVERS = linkedMapOf(
