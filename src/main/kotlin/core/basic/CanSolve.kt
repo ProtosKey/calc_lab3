@@ -1,8 +1,8 @@
-package text.basic
+package core.basic
 
-import text.model.Border
-import text.model.Epsilon
-import text.model.Expression
+import core.model.Border
+import core.model.Epsilon
+import core.model.Expression
 import java.math.BigDecimal
 
 interface CanSolve {

@@ -1,12 +1,12 @@
 package text.solver
 
-import text.basic.CanSolve
+import core.basic.CanSolve
 import text.exception.InitException
-import text.model.Border
-import text.model.Epsilon
-import text.model.Expression
+import core.model.Border
+import core.model.Epsilon
+import core.model.Expression
 import text.utils.ErrorMessages
-import text.utils.IntegralUtils
+import core.utils.IntegralUtils
 import java.math.BigDecimal
 import java.math.RoundingMode
 

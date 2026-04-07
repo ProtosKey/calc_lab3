@@ -1,4 +1,4 @@
-package text.model
+package core.model
 
 import java.math.BigDecimal
 

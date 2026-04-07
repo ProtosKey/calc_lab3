@@ -1,4 +1,4 @@
-package text.model
+package core.model
 
 import text.exception.InitException
 import java.math.BigDecimal
