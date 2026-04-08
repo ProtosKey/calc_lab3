@@ -11,7 +11,8 @@ enum class IntegralType(val label: String) {
     SIN_SQUARE("\\sin^2(x)"),
     X_SIN("x \\cdot \\sin(x)"),
     ABS("|x|"),
+    REMOVABLE_FRAC("\\frac{x^2 - 1}{x - 1}"),
     EXP_SUM("e^x + e^{-x}"),
     SQRT("\\sqrt{x}"),
-    LN("\\ln(x)")
+    LN("\\ln(x)"),
 }

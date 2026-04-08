@@ -2,8 +2,10 @@ package presentation.model
 
 import core.basic.Factory
 import core.model.Expression
+import core.model.Point
 import java.math.BigDecimal
 import java.math.MathContext
+import java.math.RoundingMode
 import kotlin.math.*
 
 object IntegralFactory : Factory<IntegralType, Integral> {
@@ -43,6 +45,19 @@ object IntegralFactory : Factory<IntegralType, Integral> {
         }, listOf())),
 
         IntegralType.ABS to Integral(Expression({ it.abs() }, listOf())),
+
+        IntegralType.REMOVABLE_FRAC to Integral(
+            Expression(
+                { x: BigDecimal ->
+                    val numerator = x.pow(2) - BigDecimal.ONE
+                    val denominator = x - BigDecimal.ONE
+                    numerator.divide(denominator, 40, RoundingMode.HALF_UP)
+                },
+                listOf(
+                    Point.Removable(BigDecimal.ONE, BigDecimal("2.0"))
+                )
+            )
+        ),
 
         IntegralType.EXP_SUM to Integral(Expression({
             val x = it.toDouble()
