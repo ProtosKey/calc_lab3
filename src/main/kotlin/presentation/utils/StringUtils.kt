@@ -8,13 +8,20 @@ object StringUtils {
     private val EXTRA = "\\.$".toRegex()
 
     fun prepareNumber(value: String): String {
-        val result = value.replace(",", ".").trim()
+        var result = value.replace(",", ".").trim()
         if (result.isEmpty()) return ""
-        return when {
+
+        result = when {
             result.startsWith(".") -> "0$result"
             result.startsWith("-.") -> result.replace("-.", "-0.")
             else -> result
         }
+
+        return removeZeros(if (result.startsWith("-")) {
+            "-" + result.substring(1).replaceFirst("^0+(?=\\d)".toRegex(), "")
+        } else {
+            result.replaceFirst("^0+(?=\\d)".toRegex(), "")
+        })
     }
 
     fun parseBigDecimal(value: String): BigDecimal {
