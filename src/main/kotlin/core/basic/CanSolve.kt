@@ -9,7 +9,7 @@ import java.math.RoundingMode
 
 interface CanSolve {
     companion object {
-        private const val CHECK_RULE = 5
+        private const val CHECK_RULE = 10
     }
 
     fun solve(expression: Expression, border: Border, epsilon: Epsilon): BigDecimal {
@@ -18,10 +18,14 @@ interface CanSolve {
         var gap = epsilon.epsilon
         var newResult = calculatePreResult(expression, border, epsilon, gap)
 
+        println(newResult)
+
         for (i in 1..CHECK_RULE) {
             result = newResult
             gap = gap.divide(BigDecimal("2"), 40, RoundingMode.HALF_UP)
             newResult = calculatePreResult(expression, border, epsilon, gap)
+
+            println(newResult)
 
             if ((result - newResult).abs() <= epsilon.epsilon) {
                 flag = true

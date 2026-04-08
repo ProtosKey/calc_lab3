@@ -23,6 +23,13 @@ object IntegralFactory : Factory<IntegralType, Integral> {
             BigDecimal(exp(it.toDouble()), mc)
         }, listOf())),
 
+        IntegralType.HYPERBOLA_SQRT to Integral(
+            Expression(
+                { BigDecimal.ONE.divide(it.sqrt(MathContext.DECIMAL128), 40, RoundingMode.HALF_UP) },
+                listOf(Point.Second(BigDecimal.ZERO))
+            )
+        ),
+
         IntegralType.LINEAR to Integral(Expression({ it }, listOf())),
 
         IntegralType.HYPERBOLA to Integral(
