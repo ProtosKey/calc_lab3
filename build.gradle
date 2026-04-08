@@ -8,7 +8,9 @@ repositories {
 }
 
 dependencies {
+    implementation("org.scilab.forge:jlatexmath:1.0.7")
     implementation(compose.desktop.currentOs)
+    implementation(compose.material3)
 }
 
 kotlin {
