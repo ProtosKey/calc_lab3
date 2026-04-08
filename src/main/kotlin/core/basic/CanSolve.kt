@@ -8,10 +8,39 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 interface CanSolve {
+    companion object {
+        private const val CHECK_RULE = 5
+    }
+
     fun solve(expression: Expression, border: Border, epsilon: Epsilon): BigDecimal {
+        var flag = false
+        var result: BigDecimal
+        var gap = epsilon.epsilon
+        var newResult = calculatePreResult(expression, border, epsilon, gap)
+
+        for (i in 1..CHECK_RULE) {
+            result = newResult
+            gap = gap.divide(BigDecimal("2"), 40, RoundingMode.HALF_UP)
+            newResult = calculatePreResult(expression, border, epsilon, gap)
+
+            if ((result - newResult).abs() <= epsilon.epsilon) {
+                flag = true
+                break
+            }
+        }
+
+        if (flag) {
+            return newResult
+        }
+        throw SolverException(ErrorMessages.INTEGRAL_DIVERGES.message)
+    }
+
+    private fun calculatePreResult(
+        expression: Expression, border: Border, epsilon: Epsilon, gap: BigDecimal
+    ): BigDecimal {
         var n = 4
         var k = 0
-        val intervals = prepareIntervals(expression, border, epsilon)
+        val intervals = prepareIntervals(expression, border, gap)
         val length = intervals.sumOf { it.right - it.left }
 
         var result: BigDecimal
@@ -25,8 +54,6 @@ interface CanSolve {
             if (iterations(k++)) {
                 throw SolverException(ErrorMessages.MAX_ITERATIONS.message)
             }
-
-            println(newResult)
         } while (check(result, newResult) >= epsilon.epsilon)
 
         return newResult
@@ -51,9 +78,8 @@ interface CanSolve {
         return result
     }
 
-    private fun prepareIntervals(expression: Expression, border: Border, epsilon: Epsilon): List<Border> {
+    private fun prepareIntervals(expression: Expression, border: Border, gap: BigDecimal): List<Border> {
         val checkPoints = expression.dangerousPoints().filter { it.x >= border.left && it.x <= border.right }
-        val gap = epsilon.epsilon * BigDecimal("1E-5")
 
         if (checkPoints.isNotEmpty()) {
             return checkPoints.indices.mapNotNull { index ->
