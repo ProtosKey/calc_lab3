@@ -1,6 +1,7 @@
 package presentation.model
 
 import core.basic.Factory
+import core.model.Condition
 import core.model.Expression
 import core.model.Point
 import java.math.BigDecimal
@@ -64,13 +65,27 @@ object IntegralFactory : Factory<IntegralType, Integral> {
             BigDecimal(exp(x) + exp(-x), mc)
         }, listOf())),
 
-        IntegralType.SQRT to Integral(Expression({
-            BigDecimal(sqrt(it.toDouble()), mc)
-        }, listOf())),
+        IntegralType.SQRT to Integral(
+            Expression(
+                {
+                    BigDecimal(sqrt(it.toDouble()), mc)
+                }, listOf(), Condition(
+                    { x: BigDecimal -> x >= BigDecimal.ZERO },
+                    "Значение не может быть меньше нуля"
+                )
+            )
+        ),
 
-        IntegralType.LN to Integral(Expression({
-            BigDecimal(ln(it.toDouble()), mc)
-        }, listOf()))
+        IntegralType.LN to Integral(
+            Expression(
+                {
+                    BigDecimal(ln(it.toDouble()), mc)
+                }, listOf(), Condition(
+                    { x: BigDecimal -> x > BigDecimal.ZERO },
+                    "Значение должно быть больше нуля"
+                )
+            )
+        )
     )
 
     override fun create(type: IntegralType): Integral = INTEGRALS[type]!!

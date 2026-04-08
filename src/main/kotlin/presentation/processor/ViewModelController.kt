@@ -1,6 +1,7 @@
 package presentation.processor
 
 import androidx.compose.runtime.mutableStateOf
+import core.exception.ExpressionException
 import core.exception.InitException
 import core.exception.SolverException
 import core.model.Border
@@ -59,7 +60,8 @@ class ViewModelController {
             } catch (e: Exception) {
                 error.value = true
                 message.value = when (e) {
-                    is InitException, is SolverException, is ParserException -> e.message!!
+                    is InitException, is SolverException, is ParserException, is ExpressionException -> e.message!!
+                    is NumberFormatException -> "Произошла вычислительная ошибка"
                     else -> "Неожиданная ошибка"
                 }
             } finally {
