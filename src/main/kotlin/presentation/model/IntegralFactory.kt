@@ -26,7 +26,10 @@ object IntegralFactory : Factory<IntegralType, Integral> {
         IntegralType.HYPERBOLA_SQRT to Integral(
             Expression(
                 { BigDecimal.ONE.divide(it.sqrt(MathContext.DECIMAL128), 40, RoundingMode.HALF_UP) },
-                listOf(Point.Second(BigDecimal.ZERO))
+                listOf(Point.Second(BigDecimal.ZERO)), Condition(
+                    { x: BigDecimal -> x >= BigDecimal.ZERO },
+                    "Значение не может быть меньше нуля"
+                )
             )
         ),
 
