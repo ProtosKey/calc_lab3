@@ -18,6 +18,11 @@ import view.utils.Colors
 
 @Composable
 fun mainScreen(controller: ViewModelController) {
+    DisposableEffect(Unit) {
+        onDispose {
+            controller.clear()
+        }
+    }
     Row(modifier = Modifier.fillMaxSize().background(Colors.main)) {
         Column(
             modifier = Modifier
