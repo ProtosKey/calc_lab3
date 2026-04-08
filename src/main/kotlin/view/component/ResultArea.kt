@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import view.utils.Colors
 import view.utils.Sizes
@@ -60,9 +59,9 @@ fun resultArea(message: String, isError: Boolean, onClear: () -> Unit) {
         ) {
             Text(
                 text = message,
-                modifier = Modifier.padding(end = Sizes.middleHeight),
+                modifier = Modifier.padding(end = Sizes.maxHeight),
                 fontSize = 16.sp,
-                lineHeight = 1.sp,
+                lineHeight = .5.sp,
                 textAlign = TextAlign.Center,
                 fontWeight = if (isError) FontWeight.Bold else FontWeight.Normal,
                 color = if (isError) Colors.accent else Colors.textMain,

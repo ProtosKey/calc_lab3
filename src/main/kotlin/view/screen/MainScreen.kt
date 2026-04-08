@@ -43,7 +43,12 @@ fun mainScreen(controller: ViewModelController) {
                     )
                 }
                 .verticalScroll(scrollState)
-                .padding(top = Sizes.maxIndent, start = Sizes.largeIndent, end = Sizes.largeIndent)
+                .padding(
+                    top = Sizes.maxIndent,
+                    start = Sizes.largeIndent,
+                    end = Sizes.largeIndent,
+                    bottom = Sizes.largeIndent
+                )
         ) {
             Text(
                 "Функции",
@@ -113,7 +118,7 @@ fun mainScreen(controller: ViewModelController) {
                 resultArea(
                     message = controller.message.value,
                     isError = controller.error.value,
-                    onClear = {controller.message.value = "" }
+                    onClear = { controller.message.value = "" }
                 )
             }
 
