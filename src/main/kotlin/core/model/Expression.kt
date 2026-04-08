@@ -5,7 +5,7 @@ import java.math.BigDecimal
 
 class Expression(
     private val function: Function,
-    val points: List<Point>,
+    private val points: List<Point>,
     private val check: Condition = Condition({ true }),
 ) {
     fun calculate(x: BigDecimal): BigDecimal {
@@ -18,6 +18,10 @@ class Expression(
             is Point -> throw ExpressionException("Неустранимая точка разрыва в ${x.toFloat()}")
             else -> function.apply(x)
         }
+    }
+
+    fun dangerousPoints(): List<Point> {
+        return points.filter { point -> point.type != PointType.REMOVABLE }
     }
 
     fun interface Function {
