@@ -32,7 +32,7 @@ fun resultArea(message: String, isError: Boolean) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = Sizes.maxHeight)
+                .heightIn(min = Sizes.middleHeight)
                 .background(
                     if (isError) Colors.sidebar
                     else Colors.sidebar,

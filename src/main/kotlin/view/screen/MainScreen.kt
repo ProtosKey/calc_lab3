@@ -35,7 +35,7 @@ fun mainScreen(controller: ViewModelController) {
                 .padding(top = 20.dp, start = 12.dp, end = 12.dp)
         ) {
             Text(
-                "Интегралы",
+                "Функции",
                 color = Colors.textMain,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleLarge,
