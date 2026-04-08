@@ -14,7 +14,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import presentation.processor.ViewModelController
 import view.component.*
 import view.utils.Colors
@@ -113,7 +112,8 @@ fun mainScreen(controller: ViewModelController) {
             SelectionContainer {
                 resultArea(
                     message = controller.message.value,
-                    isError = controller.error.value
+                    isError = controller.error.value,
+                    onClear = {controller.message.value = "" }
                 )
             }
 

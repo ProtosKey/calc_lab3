@@ -1,12 +1,14 @@
 package view.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material.icons.outlined.CopyAll
+import androidx.compose.material.icons.outlined.HighlightOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -14,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -25,7 +26,7 @@ import view.utils.Colors
 import view.utils.Sizes
 
 @Composable
-fun resultArea(message: String, isError: Boolean) {
+fun resultArea(message: String, isError: Boolean, onClear: () -> Unit) {
     val clipboardManager = LocalClipboardManager.current
 
     Column(
@@ -42,24 +43,24 @@ fun resultArea(message: String, isError: Boolean) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = Sizes.middleHeight)
+                .heightIn(min = Sizes.maxHeight)
                 .background(
-                    if (isError) Colors.sidebar
-                    else Colors.sidebar,
+                    Colors.main,
                     RoundedCornerShape(Sizes.round)
                 )
                 .border(
-                    width = Sizes.skip,
-                    color = Color.Transparent,
-                    // color = if (isError) Color(0xFFFA2D48).copy(alpha = 0.3f)
-                    // else Colors.divider,
-                    shape = RoundedCornerShape(Sizes.round)
+                    border = BorderStroke(
+                        Sizes.skip,
+                        Colors.divider
+                    ),
+                    shape = RoundedCornerShape(Sizes.round),
                 )
                 .padding(Sizes.round),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = message,
+                modifier = Modifier.padding(end = Sizes.middleHeight),
                 fontSize = 16.sp,
                 lineHeight = 1.sp,
                 textAlign = TextAlign.Center,
@@ -67,23 +68,33 @@ fun resultArea(message: String, isError: Boolean) {
                 color = if (isError) Colors.accent else Colors.textMain,
             )
 
-            if (message.isNotEmpty()) {
+            Row(
+                modifier = Modifier.align(Alignment.CenterEnd),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(-Sizes.maxIndent)
+            ) {
                 IconButton(
                     onClick = {
                         clipboardManager.setText(
-                            AnnotatedString(
-                                message.split("Ответ:").last().trim()
-                            )
+                            AnnotatedString(message.split("Ответ:").last().trim())
                         )
                     },
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .height(Sizes.minHeight)
-                        .padding(0.dp)
+                    modifier = Modifier.size(Sizes.middleHeight)
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.ContentCopy,
                         contentDescription = "Копировать",
+                        tint = Colors.textSecondary,
+                    )
+                }
+
+                IconButton(
+                    onClick = onClear,
+                    modifier = Modifier.size(Sizes.middleHeight)
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Cancel,
+                        contentDescription = "Удалить",
                         tint = Colors.textSecondary,
                     )
                 }
