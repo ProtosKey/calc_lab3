@@ -1,5 +1,6 @@
 package view.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,9 +31,10 @@ fun input(
             color = Colors.textMain,
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.labelLarge,
-            modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
+            modifier = Modifier.padding(bottom = 4.dp)
         )
 
+        val containerColor = if (isFocused) Colors.main else Colors.sidebar
         TextField(
             value = state.value,
             onValueChange = { state.value = it },
@@ -40,7 +42,7 @@ fun input(
                 .fillMaxWidth()
                 .onFocusChanged { isFocused = it.isFocused }
                 .border(
-                    border = androidx.compose.foundation.BorderStroke(
+                    border = BorderStroke(
                         1.dp,
                         if (isFocused) Colors.divider else Color.Transparent
                     ),
@@ -48,14 +50,16 @@ fun input(
                 ).height(60.dp),
             shape = RoundedCornerShape(16.dp),
             singleLine = true,
-            colors = TextFieldDefaults.textFieldColors(
-                cursorColor = Colors.textMain,
+            colors = TextFieldDefaults.colors(
                 focusedTextColor = Colors.textMain,
                 unfocusedTextColor = Colors.textMain,
-                containerColor = if (isFocused) Colors.main else Colors.sidebar,
+                focusedContainerColor = containerColor,
+                unfocusedContainerColor = containerColor,
+                disabledContainerColor = containerColor,
+                cursorColor = Colors.textMain,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
+                disabledIndicatorColor = Color.Transparent,
             )
         )
     }
