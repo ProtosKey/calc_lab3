@@ -10,6 +10,7 @@ enum class IntegralType(val label: String) {
     COS("\\cos(x)"),
     POLYNOMIAL("x^4 - 3x^2 + 5"),
     SIN_SQUARE("\\sin^2(x)"),
+    HYPERBOLA_SQUARE("\\frac{1}{x^2}"),
     X_SIN("x \\cdot \\sin(x)"),
     ABS("|x|"),
     REMOVABLE_FRAC("\\frac{x^2 - 1}{x - 1}"),

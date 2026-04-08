@@ -48,6 +48,13 @@ object IntegralFactory : Factory<IntegralType, Integral> {
             BigDecimal(sin(it.toDouble()).pow(2), mc)
         }, listOf())),
 
+        IntegralType.HYPERBOLA_SQUARE to Integral(
+            Expression(
+                { BigDecimal.ONE.divide(it.pow(2), 40, RoundingMode.HALF_UP) },
+                listOf(Point.Second(BigDecimal.ZERO))
+            )
+        ),
+
         IntegralType.X_SIN to Integral(Expression({
             it.multiply(BigDecimal(sin(it.toDouble()), mc))
         }, listOf())),
