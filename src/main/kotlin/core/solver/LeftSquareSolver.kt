@@ -16,25 +16,15 @@ class LeftSquareSolver : CanSolve {
         private const val METHOD = 1
     }
 
-    override fun solve(expression: Expression, border: Border, epsilon: Epsilon): BigDecimal {
-        var n = 4
-        var k = 0
-        var result: BigDecimal
-        var newResult: BigDecimal = calculate(expression, border, n)
-        do {
-            n *= 2
-            result = newResult
-            newResult = calculate(expression, border, n)
-
-            if (k++ > MAX_ITERATIONS) {
-                throw InitException(ErrorMessages.MAX_ITERATIONS.message)
-            }
-        } while (IntegralUtils.calcRungeRule(result, newResult, METHOD) >= epsilon.epsilon)
-
-        return newResult
+    override fun iterations(k: Int): Boolean {
+        return k >= MAX_ITERATIONS
     }
 
-    private fun calculate(expression: Expression, border: Border, n: Int): BigDecimal {
+    override fun check(result: BigDecimal, newResult: BigDecimal): BigDecimal {
+        return IntegralUtils.calcRungeRule(result, newResult, METHOD)
+    }
+
+    override fun calculate(expression: Expression, border: Border, n: Int): BigDecimal {
         var result = BigDecimal.ZERO
         val step = (border.right - border.left).divide(n.toBigDecimal(), 40, RoundingMode.HALF_UP)
 
