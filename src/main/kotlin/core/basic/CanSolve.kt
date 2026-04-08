@@ -1,6 +1,7 @@
 package core.basic
 
 import core.exception.InitException
+import core.exception.SolverException
 import core.model.*
 import core.utils.ErrorMessages
 import java.math.BigDecimal
@@ -10,35 +11,45 @@ interface CanSolve {
     fun solve(expression: Expression, border: Border, epsilon: Epsilon): BigDecimal {
         var n = 4
         var k = 0
-        var result: BigDecimal
-        var newResult: BigDecimal = calculate(expression, border, n)
         val intervals = prepareIntervals(expression, border, epsilon)
+        val length = intervals.sumOf { it.right - it.left }
+
+        var result: BigDecimal
+        var newResult = calculateByIntervals(length, n, intervals, expression)
+
         do {
             n *= 2
             result = newResult
-            newResult = BigDecimal.ZERO
-            
-            val length = intervals.sumOf { it.right - it.left }
-
-            for (interval in intervals) {
-                val share = (interval.right - interval.left).divide(length, 40, RoundingMode.HALF_UP)
-                var steps = share.multiply(BigDecimal(n)).toInt()
-
-                if (steps < 2) steps = 2
-                if (steps % 2 != 0) steps++
-
-                newResult = newResult.add(calculate(expression, interval, steps))
-            }
+            newResult = calculateByIntervals(length, n, intervals, expression)
 
             if (iterations(k++)) {
-                throw InitException(ErrorMessages.MAX_ITERATIONS.message)
+                throw SolverException(ErrorMessages.MAX_ITERATIONS.message)
             }
         } while (check(result, newResult) >= epsilon.epsilon)
 
         return newResult
     }
 
-    fun prepareIntervals(expression: Expression, border: Border, epsilon: Epsilon): List<Border> {
+    private fun calculateByIntervals(
+        length: BigDecimal,
+        n: Int,
+        intervals: List<Border>,
+        expression: Expression
+    ): BigDecimal {
+        var result = BigDecimal.ZERO
+        for (interval in intervals) {
+            val share = (interval.right - interval.left).divide(length, 40, RoundingMode.HALF_UP)
+            var steps = share.multiply(BigDecimal(n)).toInt()
+
+            if (steps < 2) steps = 2
+            if (steps % 2 != 0) steps++
+
+            result += calculate(expression, interval, steps)
+        }
+        return result
+    }
+
+    private fun prepareIntervals(expression: Expression, border: Border, epsilon: Epsilon): List<Border> {
         val checkPoints = expression.dangerousPoints().filter { it.x >= border.left && it.x <= border.right }
 
         val essentialPoints = checkPoints.filter { it.type == PointType.ESSENTIAL }

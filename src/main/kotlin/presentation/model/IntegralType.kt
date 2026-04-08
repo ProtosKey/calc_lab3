@@ -5,6 +5,7 @@ enum class IntegralType(val label: String) {
     CUBE_PLUS("x^3 + 2x"),
     EXPONENT("e^x"),
     LINEAR("x"),
+    HYPERBOLA("\\frac{1}{x}"),
     SIN("\\sin(x)"),
     COS("\\cos(x)"),
     POLYNOMIAL("x^4 - 3x^2 + 5"),

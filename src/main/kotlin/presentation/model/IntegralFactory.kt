@@ -25,6 +25,13 @@ object IntegralFactory : Factory<IntegralType, Integral> {
 
         IntegralType.LINEAR to Integral(Expression({ it }, listOf())),
 
+        IntegralType.HYPERBOLA to Integral(
+            Expression(
+                { BigDecimal.ONE.divide(it, 40, RoundingMode.HALF_UP) },
+                listOf(Point.Second(BigDecimal.ZERO))
+            )
+        ),
+
         IntegralType.SIN to Integral(Expression({
             BigDecimal(sin(it.toDouble()), mc)
         }, listOf())),

@@ -19,8 +19,8 @@ class ViewModelController {
     val currentIntegral = mutableStateOf(integrals.first())
     val currentSolver = mutableStateOf(solvers.first())
 
-    val leftBorder = mutableStateOf("0")
-    val rightBorder = mutableStateOf("10")
+    val leftBorder = mutableStateOf("-5")
+    val rightBorder = mutableStateOf("5")
     val rawEpsilon = mutableStateOf("0.01")
 
     val message = mutableStateOf("Начните работу")
@@ -34,7 +34,7 @@ class ViewModelController {
         return StringUtils.prepareNumber(rightBorder.value)
     }
 
-    val isLoading = mutableStateOf(false)
+    private val isLoading = mutableStateOf(false)
     private val scope = CoroutineScope(Dispatchers.Default + Job())
 
     fun execute() {
@@ -55,7 +55,17 @@ class ViewModelController {
                 val epsilon = Epsilon(numberEpsilon)
 
                 message.value =
-                    "Ответ: ${StringUtils.removeZeros(solver.solve(integral.expression, border, epsilon).toString())}"
+                    "Ответ: ${
+                        StringUtils.removeZeros(
+                            StringUtils.checkZero(
+                                solver.solve(
+                                    integral.expression,
+                                    border,
+                                    epsilon
+                                )
+                            ).toString()
+                        )
+                    }"
                 error.value = false
             } catch (e: Exception) {
                 error.value = true
