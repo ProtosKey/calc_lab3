@@ -1,11 +1,8 @@
 package core.solver
 
 import core.basic.CanSolve
-import core.exception.InitException
 import core.model.Border
-import core.model.Epsilon
 import core.model.Expression
-import core.utils.ErrorMessages
 import core.utils.IntegralUtils
 import java.math.BigDecimal
 import java.math.RoundingMode

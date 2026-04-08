@@ -25,6 +25,8 @@ interface CanSolve {
             if (iterations(k++)) {
                 throw SolverException(ErrorMessages.MAX_ITERATIONS.message)
             }
+
+            println(newResult)
         } while (check(result, newResult) >= epsilon.epsilon)
 
         return newResult
@@ -51,25 +53,22 @@ interface CanSolve {
 
     private fun prepareIntervals(expression: Expression, border: Border, epsilon: Epsilon): List<Border> {
         val checkPoints = expression.dangerousPoints().filter { it.x >= border.left && it.x <= border.right }
+        val gap = epsilon.epsilon * BigDecimal("1E-5")
 
-        val essentialPoints = checkPoints.filter { it.type == PointType.ESSENTIAL }
-        val secondPoints = checkPoints.filter { it.type == PointType.SECOND }
-        if (essentialPoints.isNotEmpty() || secondPoints.any { it.x == border.left || it.x == border.right }) {
-            TODO("Добавить проверку сходимости")
-        } else if (secondPoints.isNotEmpty()) {
-            return secondPoints.indices.mapNotNull { index ->
+        if (checkPoints.isNotEmpty()) {
+            return checkPoints.indices.mapNotNull { index ->
                 try {
                     if (index == 0)
-                        Border(border.left, secondPoints[index].x - epsilon.epsilon)
+                        Border(border.left, checkPoints[index].x - gap)
                     else
-                        Border(secondPoints[index - 1].x + epsilon.epsilon, secondPoints[index].x - epsilon.epsilon)
+                        Border(checkPoints[index - 1].x + gap, checkPoints[index].x - gap)
                 } catch (e: InitException) {
                     null
                 }
             }.plus(
                 listOfNotNull(
                     try {
-                        Border(secondPoints.last().x + epsilon.epsilon, border.right)
+                        Border(checkPoints.last().x + gap, border.right)
                     } catch (e: InitException) {
                         null
                     }
