@@ -19,8 +19,8 @@ fun solverSelector(controller: ViewModelController) {
         Text(
             text = "Метод вычислительного решения",
             color = Colors.textMain,
-            style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.labelLarge,
             modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
         )
 
