@@ -13,10 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import view.utils.Colors
+import view.utils.Sizes
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun input(
     label: String,
@@ -31,7 +30,7 @@ fun input(
             color = Colors.textMain,
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.labelLarge,
-            modifier = Modifier.padding(bottom = 4.dp)
+            modifier = Modifier.padding(bottom = Sizes.indent)
         )
 
         val containerColor = if (isFocused) Colors.main else Colors.sidebar
@@ -43,12 +42,12 @@ fun input(
                 .onFocusChanged { isFocused = it.isFocused }
                 .border(
                     border = BorderStroke(
-                        1.dp,
+                        Sizes.skip,
                         if (isFocused) Colors.divider else Color.Transparent
                     ),
-                    shape = RoundedCornerShape(16.dp)
-                ).height(60.dp),
-            shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(Sizes.round)
+                ).height(Sizes.middleHeight),
+            shape = RoundedCornerShape(Sizes.round),
             singleLine = true,
             colors = TextFieldDefaults.colors(
                 focusedTextColor = Colors.textMain,

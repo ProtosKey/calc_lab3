@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import view.utils.Colors
+import view.utils.Sizes
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -22,15 +22,15 @@ fun integralItem(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .height(40.dp),
-        shape = RoundedCornerShape(16.dp),
+            .height(Sizes.minHeight),
+        shape = RoundedCornerShape(Sizes.round),
         color = if (isSelected) Color.White else Color.Transparent,
-        border = if (isSelected) BorderStroke(1.dp, Colors.divider) else null,
+        border = if (isSelected) BorderStroke(Sizes.skip, Colors.divider) else null,
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 8.dp),
+                .padding(horizontal = Sizes.bigIndent),
             contentAlignment = Alignment.CenterStart
         ) {
             texDisplay(
