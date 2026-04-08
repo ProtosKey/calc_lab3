@@ -9,6 +9,7 @@ object Sizes {
     val bigIndent = 8.dp
     val largeIndent = 12.dp
     val maxIndent = 20.dp
+    val circle = 40.dp
     val minHeight = 50.dp
     val middleHeight = 60.dp
     val maxHeight = 100.dp

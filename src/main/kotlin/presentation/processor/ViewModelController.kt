@@ -34,7 +34,7 @@ class ViewModelController {
         return StringUtils.prepareNumber(rightBorder.value)
     }
 
-    private val isLoading = mutableStateOf(false)
+    val isLoading = mutableStateOf(false)
     private val scope = CoroutineScope(Dispatchers.Default + Job())
 
     fun execute() {

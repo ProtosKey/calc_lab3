@@ -118,6 +118,7 @@ fun mainScreen(controller: ViewModelController) {
                 resultArea(
                     message = controller.message.value,
                     isError = controller.error.value,
+                    isLoading = controller.isLoading.value,
                     onClear = { controller.message.value = "" }
                 )
             }
