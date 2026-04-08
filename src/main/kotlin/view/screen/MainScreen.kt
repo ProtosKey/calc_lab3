@@ -2,7 +2,10 @@ package view.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -11,17 +14,24 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import presentation.processor.ViewModelController
 import view.component.*
 import view.utils.Colors
+import view.utils.Sizes
 
 @Composable
 fun mainScreen(controller: ViewModelController) {
+    DisposableEffect(Unit) {
+        onDispose {
+            controller.clear()
+        }
+    }
+
+    val scrollState = rememberScrollState()
     Row(modifier = Modifier.fillMaxSize().background(Colors.main)) {
         Column(
             modifier = Modifier
-                .width(200.dp)
+                .width(Sizes.columnsWidth)
                 .fillMaxHeight()
                 .background(Colors.sidebar)
                 .drawBehind {
@@ -29,17 +39,23 @@ fun mainScreen(controller: ViewModelController) {
                         color = Colors.divider,
                         start = Offset(size.width, 0f),
                         end = Offset(size.width, size.height),
-                        strokeWidth = 1.dp.toPx()
+                        strokeWidth = Sizes.skip.toPx()
                     )
                 }
-                .padding(top = 20.dp, start = 12.dp, end = 12.dp)
+                .verticalScroll(scrollState)
+                .padding(
+                    top = Sizes.maxIndent,
+                    start = Sizes.largeIndent,
+                    end = Sizes.largeIndent,
+                    bottom = Sizes.largeIndent
+                )
         ) {
             Text(
-                "Интегралы",
+                "Функции",
                 color = Colors.textMain,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
+                modifier = Modifier.padding(start = Sizes.indent, bottom = Sizes.bigIndent)
             )
 
             controller.integrals.forEach { integral ->
@@ -48,13 +64,13 @@ fun mainScreen(controller: ViewModelController) {
                     isSelected = controller.currentIntegral.value == integral,
                     onClick = { controller.currentIntegral.value = integral }
                 )
-                Spacer(Modifier.height(4.dp))
+                Spacer(Modifier.height(Sizes.indent))
             }
         }
 
         Column(
             horizontalAlignment = Alignment.Start,
-            modifier = Modifier.weight(1f).fillMaxHeight().padding(12.dp),
+            modifier = Modifier.weight(1f).fillMaxHeight().padding(Sizes.largeIndent),
         ) {
             Text(
                 "Калькулятор",
@@ -63,13 +79,13 @@ fun mainScreen(controller: ViewModelController) {
                 color = Colors.textMain
             )
 
-            Spacer(Modifier.height(4.dp))
+            Spacer(Modifier.height(Sizes.indent))
 
             Surface(
                 color = Color.White,
-                shape = RoundedCornerShape(16.dp),
-                modifier = Modifier.fillMaxWidth().height(100.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, Colors.divider)
+                shape = RoundedCornerShape(Sizes.round),
+                modifier = Modifier.fillMaxWidth().height(Sizes.maxHeight),
+                border = androidx.compose.foundation.BorderStroke(Sizes.skip, Colors.divider)
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     var left = controller.leftBorderValue()
@@ -84,24 +100,28 @@ fun mainScreen(controller: ViewModelController) {
                 }
             }
 
-            Spacer(Modifier.height(1.dp))
+            Spacer(Modifier.height(Sizes.skip))
 
             solverSelector(controller)
 
-            Spacer(Modifier.height(1.dp))
+            Spacer(Modifier.height(Sizes.skip))
 
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(Sizes.bigIndent)) {
                 input("Левая граница", controller.leftBorder, Modifier.weight(1f))
                 input("Правая граница", controller.rightBorder, Modifier.weight(1f))
                 input("Точность", controller.rawEpsilon, Modifier.weight(1f))
             }
 
-            Spacer(Modifier.height(1.dp))
+            Spacer(Modifier.height(Sizes.skip))
 
-            resultArea(
-                message = controller.message.value,
-                isError = controller.error.value
-            )
+            SelectionContainer {
+                resultArea(
+                    message = controller.message.value,
+                    isError = controller.error.value,
+                    isLoading = controller.isLoading.value,
+                    onClear = { controller.message.value = "" }
+                )
+            }
 
             Spacer(modifier = Modifier.weight(1f))
 

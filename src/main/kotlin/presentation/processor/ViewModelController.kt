@@ -1,11 +1,13 @@
 package presentation.processor
 
 import androidx.compose.runtime.mutableStateOf
+import core.exception.ExpressionException
 import core.exception.InitException
 import core.exception.SolverException
 import core.model.Border
 import core.model.Epsilon
 import core.solver.SolverFactory
+import kotlinx.coroutines.*
 import presentation.exception.ParserException
 import presentation.model.IntegralFactory
 import presentation.utils.StringUtils
@@ -17,11 +19,11 @@ class ViewModelController {
     val currentIntegral = mutableStateOf(integrals.first())
     val currentSolver = mutableStateOf(solvers.first())
 
-    val leftBorder = mutableStateOf("0")
-    val rightBorder = mutableStateOf("10")
+    val leftBorder = mutableStateOf("-5")
+    val rightBorder = mutableStateOf("5")
     val rawEpsilon = mutableStateOf("0.01")
 
-    val message = mutableStateOf("Начните работу")
+    val message = mutableStateOf("Тут будет результат...")
     val error = mutableStateOf(false)
 
     fun leftBorderValue(): String {
@@ -32,28 +34,53 @@ class ViewModelController {
         return StringUtils.prepareNumber(rightBorder.value)
     }
 
+    val isLoading = mutableStateOf(false)
+    private val scope = CoroutineScope(Dispatchers.Default + Job())
+
     fun execute() {
-        try {
-            error.value = false
+        if (isLoading.value) return
 
-            val solver = SolverFactory.create(currentSolver.value)
-            val integral = IntegralFactory.create(currentIntegral.value)
+        scope.launch {
+            try {
+                isLoading.value = true
 
-            val left = StringUtils.parseBigDecimal(leftBorder.value)
-            val right = StringUtils.parseBigDecimal(rightBorder.value)
-            val numberEpsilon = StringUtils.parseBigDecimal(rawEpsilon.value)
+                val solver = SolverFactory.create(currentSolver.value)
+                val integral = IntegralFactory.create(currentIntegral.value)
 
-            val border = Border(left, right)
-            val epsilon = Epsilon(numberEpsilon)
+                val left = StringUtils.parseBigDecimal(leftBorder.value)
+                val right = StringUtils.parseBigDecimal(rightBorder.value)
+                val numberEpsilon = StringUtils.parseBigDecimal(rawEpsilon.value)
 
-            message.value =
-                "Ответ: ${StringUtils.removeZeros(solver.solve(integral.expression, border, epsilon).toString())}"
-        } catch (e: Exception) {
-            error.value = true
-            message.value = when (e) {
-                is InitException, is SolverException, is ParserException -> e.message!!
-                else -> "Неожиданная ошибка"
+                val border = Border(left, right)
+                val epsilon = Epsilon(numberEpsilon)
+
+                message.value =
+                    "Ответ: ${
+                        StringUtils.removeZeros(
+                            StringUtils.checkZero(
+                                solver.solve(
+                                    integral.expression,
+                                    border,
+                                    epsilon
+                                )
+                            ).toString()
+                        )
+                    }"
+                error.value = false
+            } catch (e: Exception) {
+                error.value = true
+                message.value = when (e) {
+                    is InitException, is SolverException, is ParserException, is ExpressionException -> e.message!!
+                    is NumberFormatException -> "Произошла вычислительная ошибка"
+                    else -> "Неожиданная ошибка"
+                }
+            } finally {
+                isLoading.value = false
             }
         }
+    }
+
+    fun clear() {
+        scope.cancel()
     }
 }

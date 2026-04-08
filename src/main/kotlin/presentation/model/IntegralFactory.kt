@@ -1,21 +1,118 @@
 package presentation.model
 
 import core.basic.Factory
+import core.model.Condition
 import core.model.Expression
-import kotlin.math.exp
+import core.model.Point
+import java.math.BigDecimal
+import java.math.MathContext
+import java.math.RoundingMode
+import kotlin.math.*
 
 object IntegralFactory : Factory<IntegralType, Integral> {
+    private val mc = MathContext.DECIMAL128
+
     private val INTEGRALS = linkedMapOf(
-        IntegralType.SQUARE to Integral(Expression { it.pow(2) }),
-        IntegralType.CUBE_PLUS to Integral(Expression { it.pow(3) + it.multiply(2.toBigDecimal()) }),
-        IntegralType.EXPONENT to Integral(Expression { x -> java.math.BigDecimal.valueOf(exp(x.toDouble())) })
+        IntegralType.SQUARE to Integral(Expression({ it.pow(2) }, listOf())),
+
+        IntegralType.CUBE_PLUS to Integral(Expression({
+            it.pow(3) + it.multiply(BigDecimal("2"))
+        }, listOf())),
+
+        IntegralType.EXPONENT to Integral(Expression({
+            BigDecimal(exp(it.toDouble()), mc)
+        }, listOf())),
+
+        IntegralType.HYPERBOLA_SQRT to Integral(
+            Expression(
+                { BigDecimal.ONE.divide(it.sqrt(MathContext.DECIMAL128), 40, RoundingMode.HALF_UP) },
+                listOf(Point.Second(BigDecimal.ZERO)), Condition(
+                    { x: BigDecimal -> x >= BigDecimal.ZERO },
+                    "Значение не может быть меньше нуля"
+                )
+            )
+        ),
+
+        IntegralType.LINEAR to Integral(Expression({ it }, listOf())),
+
+        IntegralType.HYPERBOLA to Integral(
+            Expression(
+                { BigDecimal.ONE.divide(it, 40, RoundingMode.HALF_UP) },
+                listOf(Point.Second(BigDecimal.ZERO))
+            )
+        ),
+
+        IntegralType.SIN to Integral(Expression({
+            BigDecimal(sin(it.toDouble()), mc)
+        }, listOf())),
+
+        IntegralType.COS to Integral(Expression({
+            BigDecimal(cos(it.toDouble()), mc)
+        }, listOf())),
+
+        IntegralType.POLYNOMIAL to Integral(Expression({
+            it.pow(4) - it.pow(2).multiply(BigDecimal("3")) + BigDecimal("5")
+        }, listOf())),
+
+        IntegralType.SIN_SQUARE to Integral(Expression({
+            BigDecimal(sin(it.toDouble()).pow(2), mc)
+        }, listOf())),
+
+        IntegralType.HYPERBOLA_SQUARE to Integral(
+            Expression(
+                { BigDecimal.ONE.divide(it.pow(2), 40, RoundingMode.HALF_UP) },
+                listOf(Point.Second(BigDecimal.ZERO))
+            )
+        ),
+
+        IntegralType.X_SIN to Integral(Expression({
+            it.multiply(BigDecimal(sin(it.toDouble()), mc))
+        }, listOf())),
+
+        IntegralType.ABS to Integral(Expression({ it.abs() }, listOf())),
+
+        IntegralType.REMOVABLE_FRAC to Integral(
+            Expression(
+                { x: BigDecimal ->
+                    val numerator = x.pow(2) - BigDecimal.ONE
+                    val denominator = x - BigDecimal.ONE
+                    numerator.divide(denominator, 40, RoundingMode.HALF_UP)
+                },
+                listOf(
+                    Point.Removable(BigDecimal.ONE, BigDecimal("2.0"))
+                )
+            )
+        ),
+
+        IntegralType.EXP_SUM to Integral(Expression({
+            val x = it.toDouble()
+            BigDecimal(exp(x) + exp(-x), mc)
+        }, listOf())),
+
+        IntegralType.SQRT to Integral(
+            Expression(
+                {
+                    BigDecimal(sqrt(it.toDouble()), mc)
+                }, listOf(), Condition(
+                    { x: BigDecimal -> x >= BigDecimal.ZERO },
+                    "Значение не может быть меньше нуля"
+                )
+            )
+        ),
+
+        IntegralType.LN to Integral(
+            Expression(
+                {
+                    BigDecimal(ln(it.toDouble()), mc)
+                }, listOf(), Condition(
+                    { x: BigDecimal -> x > BigDecimal.ZERO },
+                    "Значение должно быть больше нуля"
+                )
+            )
+        )
     )
 
-    override fun create(type: IntegralType): Integral {
-        return INTEGRALS[type]!!
-    }
+    override fun create(type: IntegralType): Integral = INTEGRALS[type]!!
 
-    override fun createKeys(): List<IntegralType> {
-        return INTEGRALS.keys.toList()
-    }
+    override fun createKeys(): List<IntegralType> = INTEGRALS.keys.toList()
 }
