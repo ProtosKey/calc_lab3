@@ -38,7 +38,8 @@ class ViewModelController {
             val border = Border(left, right)
             val epsilon = Epsilon(numberEpsilon)
 
-            message.value = "Ответ ${solver.solve(integral.expression, border, epsilon)}"
+            message.value =
+                "Ответ: ${StringUtils.removeZeros(solver.solve(integral.expression, border, epsilon).toString())}"
         } catch (e: Exception) {
             error.value = true
             message.value = when (e) {
