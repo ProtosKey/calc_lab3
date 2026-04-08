@@ -12,7 +12,7 @@ import java.math.RoundingMode
 
 class SimpsonSolver : CanSolve {
     companion object {
-        private const val MAX_ITERATIONS = 25
+        private const val MAX_ITERATIONS = 20
         private const val METHOD = 4
     }
 
