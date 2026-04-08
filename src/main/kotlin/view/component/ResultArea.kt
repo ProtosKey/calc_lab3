@@ -4,20 +4,30 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ContentCopy
+import androidx.compose.material.icons.outlined.CopyAll
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import view.utils.Colors
 import view.utils.Sizes
 
 @Composable
 fun resultArea(message: String, isError: Boolean) {
+    val clipboardManager = LocalClipboardManager.current
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(Sizes.indent)
@@ -56,6 +66,28 @@ fun resultArea(message: String, isError: Boolean) {
                 fontWeight = if (isError) FontWeight.Bold else FontWeight.Normal,
                 color = if (isError) Colors.accent else Colors.textMain,
             )
+
+            if (message.isNotEmpty()) {
+                IconButton(
+                    onClick = {
+                        clipboardManager.setText(
+                            AnnotatedString(
+                                message.split("Ответ:").last().trim()
+                            )
+                        )
+                    },
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .height(Sizes.minHeight)
+                        .padding(0.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.ContentCopy,
+                        contentDescription = "Копировать",
+                        tint = Colors.textSecondary,
+                    )
+                }
+            }
         }
     }
 }

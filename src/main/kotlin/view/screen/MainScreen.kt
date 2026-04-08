@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -109,10 +110,12 @@ fun mainScreen(controller: ViewModelController) {
 
             Spacer(Modifier.height(Sizes.skip))
 
-            resultArea(
-                message = controller.message.value,
-                isError = controller.error.value
-            )
+            SelectionContainer {
+                resultArea(
+                    message = controller.message.value,
+                    isError = controller.error.value
+                )
+            }
 
             Spacer(modifier = Modifier.weight(1f))
 
