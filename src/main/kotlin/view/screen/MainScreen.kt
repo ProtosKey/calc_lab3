@@ -2,7 +2,9 @@ package view.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,6 +25,8 @@ fun mainScreen(controller: ViewModelController) {
             controller.clear()
         }
     }
+
+    val scrollState = rememberScrollState()
     Row(modifier = Modifier.fillMaxSize().background(Colors.main)) {
         Column(
             modifier = Modifier
@@ -37,6 +41,7 @@ fun mainScreen(controller: ViewModelController) {
                         strokeWidth = 1.dp.toPx()
                     )
                 }
+                .verticalScroll(scrollState)
                 .padding(top = 20.dp, start = 12.dp, end = 12.dp)
         ) {
             Text(
