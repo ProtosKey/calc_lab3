@@ -7,9 +7,9 @@ object StringUtils {
     private val ZEROS = "0*$".toRegex()
     private val EXTRA = "\\.$".toRegex()
 
-    private fun prepareNumber(value: String): String {
+    fun prepareNumber(value: String): String {
         val result = value.replace(",", ".").trim()
-        if (result.isEmpty()) return "0"
+        if (result.isEmpty()) return ""
         return when {
             result.startsWith(".") -> "0$result"
             result.startsWith("-.") -> result.replace("-.", "-0.")
@@ -21,7 +21,11 @@ object StringUtils {
         try {
             return prepareNumber(value).toBigDecimal()
         } catch (e: NumberFormatException) {
-            throw ParserException("Значение <$value> должно быть числом")
+            if (value.isEmpty()) {
+                throw ParserException("Значение не может быть пустым")
+            } else {
+                throw ParserException("Значение <$value> должно быть числом")
+            }
         }
     }
 

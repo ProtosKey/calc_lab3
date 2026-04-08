@@ -24,6 +24,14 @@ class ViewModelController {
     val message = mutableStateOf("Начните работу")
     val error = mutableStateOf(false)
 
+    fun leftBorderValue(): String {
+        return StringUtils.prepareNumber(leftBorder.value)
+    }
+
+    fun rightBorderValue(): String {
+        return StringUtils.prepareNumber(rightBorder.value)
+    }
+
     fun execute() {
         try {
             error.value = false
