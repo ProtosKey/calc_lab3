@@ -21,7 +21,7 @@ fun solverSelector(controller: ViewModelController) {
             color = Colors.textMain,
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.labelLarge,
-            modifier = Modifier.padding(top = Sizes.indent, bottom = Sizes.indent)
+            modifier = Modifier.padding(bottom = Sizes.indent)
         )
 
         Surface(

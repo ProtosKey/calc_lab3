@@ -23,7 +23,7 @@ class ViewModelController {
     val rightBorder = mutableStateOf("5")
     val rawEpsilon = mutableStateOf("0.01")
 
-    val message = mutableStateOf("Начните работу")
+    val message = mutableStateOf("Тут будет результат...")
     val error = mutableStateOf(false)
 
     fun leftBorderValue(): String {
