@@ -7,7 +7,10 @@ object Sizes {
     val round = 16.dp
     val indent = 4.dp
     val bigIndent = 8.dp
-    val minHeight = 40.dp
+    val largeIndent = 12.dp
+    val maxIndent = 20.dp
+    val minHeight = 50.dp
     val middleHeight = 60.dp
     val maxHeight = 100.dp
+    val columnsWidth = 200.dp
 }
