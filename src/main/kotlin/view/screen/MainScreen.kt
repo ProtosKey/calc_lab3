@@ -75,8 +75,8 @@ fun mainScreen(controller: ViewModelController) {
                     var left = controller.leftBorderValue()
                     var right = controller.rightBorderValue()
 
-                    left = left.ifEmpty { "A" }
-                    right = right.ifEmpty { "B" }
+                    left = left.ifEmpty { "a" }
+                    right = right.ifEmpty { "b" }
 
                     val integralTex = "\\int_{$left}^{$right} " +
                             "${controller.currentIntegral.value.label} \\, dx"
@@ -91,8 +91,8 @@ fun mainScreen(controller: ViewModelController) {
             Spacer(Modifier.height(1.dp))
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                input("Граница A", controller.leftBorder, Modifier.weight(1f))
-                input("Граница B", controller.rightBorder, Modifier.weight(1f))
+                input("Левая граница", controller.leftBorder, Modifier.weight(1f))
+                input("Правая граница", controller.rightBorder, Modifier.weight(1f))
                 input("Точность", controller.rawEpsilon, Modifier.weight(1f))
             }
 
