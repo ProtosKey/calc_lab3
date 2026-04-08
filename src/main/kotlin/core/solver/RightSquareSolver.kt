@@ -42,6 +42,6 @@ class RightSquareSolver : CanSolve {
             result += expression.calculate(border.left + step * i.toBigDecimal())
         }
 
-        return result
+        return result * step
     }
 }

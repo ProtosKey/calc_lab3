@@ -12,7 +12,7 @@ import java.math.RoundingMode
 
 class LeftSquareSolver : CanSolve {
     companion object {
-        private const val MAX_ITERATIONS = 25
+        private const val MAX_ITERATIONS = 20
         private const val METHOD = 1
     }
 
@@ -42,6 +42,6 @@ class LeftSquareSolver : CanSolve {
             result += expression.calculate(border.left + step * i.toBigDecimal())
         }
 
-        return result
+        return result * step
     }
 }

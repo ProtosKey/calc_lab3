@@ -43,6 +43,6 @@ class MiddleSquareSolver : CanSolve {
                 .divide(2.toBigDecimal(), 40, RoundingMode.HALF_UP))
         }
 
-        return result
+        return result * step
     }
 }
