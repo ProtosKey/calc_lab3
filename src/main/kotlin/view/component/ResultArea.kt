@@ -103,7 +103,10 @@ fun resultArea(message: String, isError: Boolean, isLoading: Boolean, onClear: (
                     IconButton(
                         onClick = {
                             clipboardManager.setText(
-                                AnnotatedString(message.split("Ответ:").last().trim())
+                                AnnotatedString(
+                                    message.split("Ответ:").last().trim()
+                                        .split("Колчество итераций:").first().trim()
+                                )
                             )
                         },
                         modifier = Modifier.size(Sizes.middleHeight)
