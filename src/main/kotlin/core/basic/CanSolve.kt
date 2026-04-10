@@ -12,22 +12,18 @@ interface CanSolve {
         private const val CHECK_RULE = 10
     }
 
-    fun solve(expression: Expression, border: Border, epsilon: Epsilon): BigDecimal {
+    fun solve(expression: Expression, border: Border, epsilon: Epsilon): List<BigDecimal> {
         var flag = false
-        var result: BigDecimal
+        var result: List<BigDecimal>
         var gap = epsilon.epsilon
         var newResult = calculatePreResult(expression, border, epsilon, gap)
-
-        println(newResult)
 
         for (i in 1..CHECK_RULE) {
             result = newResult
             gap = gap.divide(BigDecimal("2"), 40, RoundingMode.HALF_UP)
             newResult = calculatePreResult(expression, border, epsilon, gap)
 
-            println(newResult)
-
-            if ((result - newResult).abs() <= epsilon.epsilon) {
+            if ((result.first() - newResult.first()).abs() <= epsilon.epsilon) {
                 flag = true
                 break
             }
@@ -41,7 +37,7 @@ interface CanSolve {
 
     private fun calculatePreResult(
         expression: Expression, border: Border, epsilon: Epsilon, gap: BigDecimal
-    ): BigDecimal {
+    ): List<BigDecimal> {
         var n = 4
         var k = 0
         val intervals = prepareIntervals(expression, border, gap)
@@ -60,7 +56,7 @@ interface CanSolve {
             }
         } while (check(result, newResult) >= epsilon.epsilon)
 
-        return newResult
+        return listOf(newResult, k.toBigDecimal())
     }
 
     private fun calculateByIntervals(

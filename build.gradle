@@ -17,3 +17,15 @@ dependencies {
 kotlin {
     jvmToolchain(17)
 }
+
+compose.desktop {
+    application {
+        mainClass = "MainKt"
+
+        nativeDistributions {
+            targetFormats(org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg)
+            packageName = "MyComposeApp"
+            packageVersion = "1.0.0"
+        }
+    }
+}
